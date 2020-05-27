@@ -5,9 +5,8 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         main.c
 #        c41-memory.c
-
-
-
+        malloc_new.c
+        malloc_new.h
 
         )
 
