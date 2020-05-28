@@ -34,6 +34,8 @@ Process finished with exit code 0
      *
      */
 
+    printf("%lu", sizeof(char*));
+    printf("%lu", sizeof(double*));
 
 
     return 0;
