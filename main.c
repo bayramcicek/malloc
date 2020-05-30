@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+//#include "malloc_new.h"
 
 int main() {
     printf("Hello, World!\n");
@@ -34,8 +35,8 @@ Process finished with exit code 0
      *
      */
 
-    printf("%lu", sizeof(char*));
-    printf("%lu", sizeof(double*));
+    printf("%lu\n", sizeof(char*));
+    printf("%lu", sizeof(long*));
 
 
     return 0;
