@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#define NALLOC 1024 /* minimum #units to request */
 
 typedef long Align; /* for alignment to long boundary */
 
@@ -17,9 +18,23 @@ union header { /* block header */
 };
 
 typedef union header Header;
-
 static Header base; /* empty list to get started */
 static Header *freep = NULL; /* start of free list */
+
+/* morecore: ask system for more memory */
+static Header *morecore(unsigned nu) {
+    char *cp, *sbrk(int);
+    Header *up;
+    if (nu < NALLOC)
+        nu = NALLOC;
+    cp = sbrk(nu * sizeof(Header));
+    if (cp == (char *) -1) /* no space at all */
+        return NULL;
+    up = (Header *) cp;
+    up->s.size = nu;
+    free((void *)(up+1));
+    return freep;
+}
 
 /* malloc: general-purpose storage allocator */
 void *malloc_new(unsigned nbytes) {
@@ -52,4 +67,6 @@ void *malloc_new(unsigned nbytes) {
 
     }
 }
+
+
 
