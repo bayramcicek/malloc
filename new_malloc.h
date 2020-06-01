@@ -4,7 +4,7 @@
 #ifndef MALLOC_NEW_MALLOC_H
 #define MALLOC_NEW_MALLOC_H
 
-// TODO: fonksiyon ve veri yapıları tanımlarını buraya yap.
+// TODO: fonksiyon ve/veya veri yapıları tanımları.
 
 /* free: put block ap in free list */
 void free(void *);

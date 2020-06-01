@@ -17,7 +17,7 @@ int main() {
     ptr = malloc(10 * sizeof(int)); // malloc returns a pointer to the allocated memory.
 
     if (ptr != NULL) {
-        *(ptr + 3) = 49;  /* assign 49 to 3th int */
+        *(ptr + 3) = 49;  /* assign 49 to 3th int - index 3'e 49'u ata*/
     }
 
     printf("index\tvalue\taddress\n");
@@ -33,10 +33,10 @@ int main() {
 
     /* yeni yazdığımız new_malloc fonksiyonu */
     /* a block of 10 ints */
-    new_ptr = new_malloc(10 * sizeof(int)); // malloc returns a pointer to the allocated memory.
+    new_ptr = new_malloc(10 * sizeof(int)); // new_malloc returns a pointer to the allocated memory.
 
     if (new_ptr != NULL) {
-        *(new_ptr + 7) = 99;  /* assign 99 to 7th int */
+        *(new_ptr + 7) = 99;  /* assign 99 to 7th int - index 7'ye 99'u ata*/
     }
 
     printf("index\tvalue\taddress\n");
@@ -44,7 +44,8 @@ int main() {
         printf("%d\t->%3d\t -> %p\n", i, *(new_ptr + i), (new_ptr + i));
     }
 
-    /*
+    /* ÇIKTILAR (IDE ve Terminal):
+     *
      * running from IDE:
 
 Normal malloc():
