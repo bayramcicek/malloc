@@ -4,30 +4,37 @@
 #include <stdio.h>
 #include "new_malloc.h"
 
+/* minimum alan istek miktarı */
 #define NALLOC 1024 /* minimum #units to request */
 
-typedef long Align; /* for alignment to long boundary */
-
+/* blok başlığı için kullanılan union yapısı */
 union header { /* block header */
-
     struct {
-        union header *ptr;  /* next block if on free list */
-        unsigned size;      /* size of this block */
-    } s;
+        /* free listesindeki bir sonraki blok */
+        union header *ptr; /* next block if on free list */
 
-    Align x; /* force alignment of blocks */
+        /* blok boyutunu tutan değişken */
+        unsigned size; /* size of this block */
+    } s;
 };
 
+/* (union header) -> (Header) olarak kısalt */
 typedef union header Header;
+
+/* başlangıç için boş liste oluştur */
 static Header base; /* empty list to get started */
+
+/* boş listenin başlangıcı -> NULL ata */
 static Header *freep = NULL; /* start of free list */
 
-/* free: put block ap in free list */
 /* free: *ap bloğunu free listesine ekle */
-void free(void *ap) {
+void new_free(void *ap) { /* free: put block ap in free list */
     Header *bp, *p;
+
+    /* bp -> blok başlığına işaret eder */
     bp = (Header *) ap - 1; /* point to block header */
 
+    /* yeterli blok bulunma süreci */
     for (p = freep; !(bp > p && bp < p->s.ptr); p = p->s.ptr)
         if (p >= p->s.ptr && (bp > p || bp < p->s.ptr))
             break; /* freed block at start or end of arena */
@@ -62,7 +69,7 @@ static Header *morecore(unsigned nu) {
     up = (Header *) cp;
     up->s.size = nu;
 
-    free((void *) (up + 1));
+    new_free((void *) (up + 1));
 
     return freep;
 }

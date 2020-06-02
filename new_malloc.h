@@ -6,7 +6,7 @@
 
 // TODO: kullanılacak fonksiyon ve/veya veri yapıları tanımları.
 
-void free(void *);
+void new_free(void *);
 
 void *new_malloc(unsigned);
 
