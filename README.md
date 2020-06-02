@@ -6,4 +6,6 @@
 
 ---
 
+- output: / çıktı:
+
 ![terminal_output](terminal_output.png)
