@@ -6,10 +6,12 @@
 
 // TODO: fonksiyon ve/veya veri yapıları tanımları.
 
-/* free: put block ap in free list */
+/* free: put the block in free list */
+/* free: belirlenen bloğu free listesine ekle */
 void free(void *);
 
-/* malloc: general-purpose storage allocator */
+/* new_malloc: general-purpose storage allocator */
+/* new_malloc: (yeni yazdığımız) alan tahsis edici fonksiyon */
 void *new_malloc(unsigned);
 
 #endif //MALLOC_NEW_MALLOC_H
