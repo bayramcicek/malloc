@@ -73,7 +73,7 @@ static Header *morecore(unsigned nu) {
     cp = sbrk(nu * sizeof(Header));
 
     /* hafızada yer yok ise NULL döndür */
-    if (cp == (char *) -1) /* no space at all */
+    if (cp == (char *) -1)  /* no space at all */
         return NULL;
 
     up = (Header *) cp;
@@ -89,11 +89,11 @@ static Header *morecore(unsigned nu) {
 /* new_malloc: general-purpose storage allocator */
 void *new_malloc(unsigned nbytes) {
     Header *p, *prevp;
-    Header *morecore(unsigned);
     unsigned nunits;
 
     nunits = (nbytes + sizeof(Header) - 1) / sizeof(Header) + 1;
 
+    /*  */
     if ((prevp = freep) == NULL) { /* no free list yet */
         base.s.ptr = freep = prevp = &base;
         base.s.size = 0;
