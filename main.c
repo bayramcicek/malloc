@@ -50,7 +50,7 @@ int main() {
     }
 
     /* new_free() */
-    new_free(ptr);
+    new_free(new_ptr);
 
 
     /* OUTPUTS / ÇIKTILAR (IDE - Terminal):
@@ -121,7 +121,6 @@ running from terminal:
     7       -> 99    -> 0x5625e6e89fec
     8       ->  0    -> 0x5625e6e89ff0
     9       ->  0    -> 0x5625e6e89ff4
-
 
      */
 
