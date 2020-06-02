@@ -23,6 +23,7 @@ static Header base; /* empty list to get started */
 static Header *freep = NULL; /* start of free list */
 
 /* free: put block ap in free list */
+/* free: *ap bloğunu free listesine ekle */
 void free(void *ap) {
     Header *bp, *p;
     bp = (Header *) ap - 1; /* point to block header */
@@ -66,7 +67,8 @@ static Header *morecore(unsigned nu) {
     return freep;
 }
 
-/* malloc: general-purpose storage allocator */
+/* new_malloc: general-purpose storage allocator */
+/* new_malloc: (yeni yazdığımız) alan tahsis edici fonksiyon */
 void *new_malloc(unsigned nbytes) {
     Header *p, *prevp;
 //    Header *morecore(unsigned);
