@@ -10,9 +10,8 @@
 Prentice-Hall, Chapter 5, 7, 8 and Appendix B.5
 
 ---
-<br>
 
-#### Installation
+### Installation
 
 - Clone repository:
 
@@ -21,16 +20,12 @@ Prentice-Hall, Chapter 5, 7, 8 and Appendix B.5
   $ cd ./malloc
 </pre>
 
-<br>
-
 - Run:
 
 <pre>
   $ gcc main.c new_malloc.c
   $ ./a.out
 </pre>
-
-<br>
 
 - Output:
 
