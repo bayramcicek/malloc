@@ -36,7 +36,7 @@ void new_free(void *ap) {  /* free: put block ap in free list */
     /* yeterli blok bulunma süreci */
     for (p = freep; !(bp > p && bp < p->s.ptr); p = p->s.ptr)
         if (p >= p->s.ptr && (bp > p || bp < p->s.ptr))
-            break; /* freed block at start or end of arena */
+            break;  /* freed block at start or end of arena */
 
     /* free listesinin yeniden düzenlenmesi */
     /* update free list */
@@ -52,7 +52,7 @@ void new_free(void *ap) {  /* free: put block ap in free list */
     } else
         p->s.ptr = bp;
 
-    /* p artık free listenin başlangıcı oluyor */
+    /* p, artık free listesinin başlangıcı oluyor */
     freep = p;  /* p: start of free list */
 }
 
@@ -91,29 +91,43 @@ void *new_malloc(unsigned nbytes) {
     Header *p, *prevp;
     unsigned nunits;
 
+    /* istenilen alan + header bilgisi */
     nunits = (nbytes + sizeof(Header) - 1) / sizeof(Header) + 1;
 
-    /*  */
-    if ((prevp = freep) == NULL) { /* no free list yet */
+    /* free list yoksa -> size = 0 ata */
+    if ((prevp = freep) == NULL) {  /* no free list yet */
         base.s.ptr = freep = prevp = &base;
         base.s.size = 0;
     }
 
+    /* yeterince büyük alan bulma süreci */
     for (p = prevp->s.ptr;; prevp = p, p = p->s.ptr) {
-        if (p->s.size >= nunits) { /* big enough */
-            if (p->s.size == nunits) /* exactly */
+
+        /* yeterince büyük alan bulununca */
+        if (p->s.size >= nunits) {  /* big enough */
+
+            /* tam istenilen kadar alan bulununca */
+            if (p->s.size == nunits)  /* exactly */
                 prevp->s.ptr = p->s.ptr;
-            else { /* allocate tail end */
+            else {  /* allocate tail end */
                 p->s.size -= nunits;
                 p += p->s.size;
                 p->s.size = nunits;
             }
+
+            /* free listesinin başlangıç adresini güncelle */
             freep = prevp;
+
+            /* header yapısından 1 sonraki tahsis edilmiş alanı geri döndür */
             return (void *) (p + 1);
         }
-        if (p == freep) /* wrapped around free list */
+
+        /* free listesinde yeteri kadar alan yok ise
+         * işletim sisteminden istekte bulun.
+         * eğer NULL dönüyor ise boş alan yok demektir */
+        if (p == freep)
             if ((p = morecore(nunits)) == NULL)
-                return NULL; /* none left */
+                return NULL;  /* none left */
 
     }
 }
