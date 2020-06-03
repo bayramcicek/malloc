@@ -40,7 +40,12 @@ int main() {
     new_ptr = new_malloc(10 * sizeof(int));
 
     if (new_ptr != NULL) {
-        *(new_ptr + 7) = 99;  /* index 7'ye 99'u ata - assign 99 to 7th int */
+        *(new_ptr + 7) = 99;  /* index'lere atama işlemleri */
+        *(new_ptr + 0) = 12;
+        *(new_ptr + 2) = 33;
+        *(new_ptr + 3) = -45;
+        *(new_ptr + 5) = 77;
+        *(new_ptr + 8) = 11;
     }
 
     /* print -> index - value - address */
@@ -52,6 +57,11 @@ int main() {
     /* new_free() */
     new_free(new_ptr);
 
+    printf("\n***\n"
+           "Alan tahsisi ve serbest bırakılması başarıyla tamamlandı!"
+           "\nAllocation and deallocation is done successfully!\n"
+           "***\n");
+
 
     /* OUTPUTS / ÇIKTILAR (IDE - Terminal):
      *
@@ -60,31 +70,37 @@ running from IDE:
 
     Normal malloc():
     index	value	address
-    0	->  0	 -> 0x55ef1a6b26b0
-    1	->  0	 -> 0x55ef1a6b26b4
-    2	->  0	 -> 0x55ef1a6b26b8
-    3	-> 49	 -> 0x55ef1a6b26bc
-    4	->  0	 -> 0x55ef1a6b26c0
-    5	->  0	 -> 0x55ef1a6b26c4
-    6	->  0	 -> 0x55ef1a6b26c8
-    7	->  0	 -> 0x55ef1a6b26cc
-    8	->  0	 -> 0x55ef1a6b26d0
-    9	->  0	 -> 0x55ef1a6b26d4
+    0	->  0	 -> 0x5597d4aab6b0
+    1	->  0	 -> 0x5597d4aab6b4
+    2	->  0	 -> 0x5597d4aab6b8
+    3	-> 49	 -> 0x5597d4aab6bc
+    4	->  0	 -> 0x5597d4aab6c0
+    5	->  0	 -> 0x5597d4aab6c4
+    6	->  0	 -> 0x5597d4aab6c8
+    7	->  0	 -> 0x5597d4aab6cc
+    8	->  0	 -> 0x5597d4aab6d0
+    9	->  0	 -> 0x5597d4aab6d4
 
     new_malloc():
     index	value	address
-    0	->  0	 -> 0x55ef1a6d6fd0
-    1	->  0	 -> 0x55ef1a6d6fd4
-    2	->  0	 -> 0x55ef1a6d6fd8
-    3	->  0	 -> 0x55ef1a6d6fdc
-    4	->  0	 -> 0x55ef1a6d6fe0
-    5	->  0	 -> 0x55ef1a6d6fe4
-    6	->  0	 -> 0x55ef1a6d6fe8
-    7	-> 99	 -> 0x55ef1a6d6fec
-    8	->  0	 -> 0x55ef1a6d6ff0
-    9	->  0	 -> 0x55ef1a6d6ff4
+    0	-> 12	 -> 0x5597d4acffd0
+    1	->  0	 -> 0x5597d4acffd4
+    2	-> 33	 -> 0x5597d4acffd8
+    3	->-45	 -> 0x5597d4acffdc
+    4	->  0	 -> 0x5597d4acffe0
+    5	-> 77	 -> 0x5597d4acffe4
+    6	->  0	 -> 0x5597d4acffe8
+    7	-> 99	 -> 0x5597d4acffec
+    8	-> 11	 -> 0x5597d4acfff0
+    9	->  0	 -> 0x5597d4acfff4
+
+    ***
+    Alan tahsisi ve serbest bırakılması başarıyla tamamlandı!
+    Allocation and deallocation is done successfully!
+    ***
 
     Process finished with exit code 0
+
 
      */
 
@@ -98,29 +114,35 @@ running from terminal:
 
     Normal malloc():
     index   value   address
-    0       ->  0    -> 0x5625e6e656b0
-    1       ->  0    -> 0x5625e6e656b4
-    2       ->  0    -> 0x5625e6e656b8
-    3       -> 49    -> 0x5625e6e656bc
-    4       ->  0    -> 0x5625e6e656c0
-    5       ->  0    -> 0x5625e6e656c4
-    6       ->  0    -> 0x5625e6e656c8
-    7       ->  0    -> 0x5625e6e656cc
-    8       ->  0    -> 0x5625e6e656d0
-    9       ->  0    -> 0x5625e6e656d4
+    0       ->  0    -> 0x55d1d99f86b0
+    1       ->  0    -> 0x55d1d99f86b4
+    2       ->  0    -> 0x55d1d99f86b8
+    3       -> 49    -> 0x55d1d99f86bc
+    4       ->  0    -> 0x55d1d99f86c0
+    5       ->  0    -> 0x55d1d99f86c4
+    6       ->  0    -> 0x55d1d99f86c8
+    7       ->  0    -> 0x55d1d99f86cc
+    8       ->  0    -> 0x55d1d99f86d0
+    9       ->  0    -> 0x55d1d99f86d4
 
     new_malloc():
     index   value   address
-    0       ->  0    -> 0x5625e6e89fd0
-    1       ->  0    -> 0x5625e6e89fd4
-    2       ->  0    -> 0x5625e6e89fd8
-    3       ->  0    -> 0x5625e6e89fdc
-    4       ->  0    -> 0x5625e6e89fe0
-    5       ->  0    -> 0x5625e6e89fe4
-    6       ->  0    -> 0x5625e6e89fe8
-    7       -> 99    -> 0x5625e6e89fec
-    8       ->  0    -> 0x5625e6e89ff0
-    9       ->  0    -> 0x5625e6e89ff4
+    0       -> 12    -> 0x55d1d9a1cfd0
+    1       ->  0    -> 0x55d1d9a1cfd4
+    2       -> 33    -> 0x55d1d9a1cfd8
+    3       ->-45    -> 0x55d1d9a1cfdc
+    4       ->  0    -> 0x55d1d9a1cfe0
+    5       -> 77    -> 0x55d1d9a1cfe4
+    6       ->  0    -> 0x55d1d9a1cfe8
+    7       -> 99    -> 0x55d1d9a1cfec
+    8       -> 11    -> 0x55d1d9a1cff0
+    9       ->  0    -> 0x55d1d9a1cff4
+
+    ***
+    Alan tahsisi ve serbest bırakılması başarıyla tamamlandı!
+    Allocation and deallocation is done successfully!
+    ***
+
 
      */
 
