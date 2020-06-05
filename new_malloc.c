@@ -95,13 +95,13 @@ static Header *morecore(unsigned nu) {
     return freep;
 }
 
-/* new_malloc: (yeni yazdığımız) alan tahsis edici fonksiyon */
+/* new_malloc: yeni yazdığımız alan tahsis edici fonksiyon */
 /* new_malloc: general-purpose storage allocator */
 void *new_malloc(unsigned nbytes) {
     Header *p, *prevp;
     unsigned nunits;
 
-    /* istenilen alan + header bilgisi */
+    /* nunits sayısı - number of nunits */
     nunits = (nbytes + sizeof(Header) - 1) / sizeof(Header) + 1;
 
     /* free list yoksa -> size = 0 ata */
@@ -113,13 +113,14 @@ void *new_malloc(unsigned nbytes) {
     /* yeterince büyük alan bulma süreci */
     for (p = prevp->str.ptr;; prevp = p, p = p->str.ptr) {
 
-        /* yeterince büyük alan bulununca */
-        if (p->str.size >= nunits) {  /* big enough */
+        /* yeterince büyük alan bulununca - big enough */
+        if (p->str.size >= nunits) {
 
             /* tam istenilen kadar alan bulununca */
-            if (p->str.size == nunits)  /* exactly */
+            if (p->str.size == nunits)
                 prevp->str.ptr = p->str.ptr;
-            else {  /* allocate tail end */
+            else {
+                /* allocate tail end */
                 p->str.size -= nunits;
                 p += p->str.size;
                 p->str.size = nunits;
@@ -128,7 +129,7 @@ void *new_malloc(unsigned nbytes) {
             /* free listesinin başlangıç adresini güncelle */
             freep = prevp;
 
-            /* header yapısından 1 sonraki tahsis edilmiş alanı geri döndür */
+            /* ayrılan alanın pointer'ını geri döndür */
             return (void *) (p + 1);
         }
 
