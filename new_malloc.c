@@ -3,54 +3,64 @@
 
 #include <stdio.h>
 
-/* minimum alan istek miktarı */
-#define NALLOC 1024  /* minimum #units to request */
+/* minimum alan(byte) istek miktarı */
+#define MIN_REQUEST 1024  /* minimum bytes to request */
 
 /* blok başlığı için kullanılan union yapısı */
 union header {  /* block header */
     struct {
         /* free listesindeki bir sonraki blok */
-        union header *ptr;  /* next block if on free list */
+        union header *ptr;  /* next block in free list */
 
         /* blok boyutunu tutan değişken */
         unsigned size;  /* size of this block */
-    } s;
+    } str;
 };
 
 /* (union header) -> (Header) olarak temsil et */
 typedef union header Header;
 
 /* başlangıç için boş liste oluştur */
-static Header base;  /* empty list to get started */
+static Header empty_list;
 
 /* boş listenin başlangıcı -> NULL ata */
 static Header *freep = NULL;  /* start of free list */
 
-/* free: *ap bloğunu free listesine ekle */
-void new_free(void *ap) {  /* free: put block ap in free list */
-    Header *bp, *p;
+/* free: *add bloğunu free listesine ekle */
+void new_free(void *add) {  /* free: put the block *add in free list */
 
-    /* bp -> blok başlığına işaret eder */
-    bp = (Header *) ap - 1;  /* point to block header */
+    /* p: free liste başı - start of free list */
+    Header *block_p, *p;
+
+    /* block_p -> blok başlığına işaret eder */
+    block_p = (Header *) add - 1;  /* point to block header */
 
     /* yeterli blok bulunma süreci */
-    for (p = freep; !(bp > p && bp < p->s.ptr); p = p->s.ptr)
-        if (p >= p->s.ptr && (bp > p || bp < p->s.ptr))
-            break;  /* freed block at start or end of arena */
+    for (p = freep; !(block_p > p && block_p < p->str.ptr); p = p->str.ptr)
+        if (p >= p->str.ptr && (block_p > p || block_p < p->str.ptr))
+            break;
 
-    /* free listesinin yeniden düzenlenmesi */
-    /* update free list */
-    if (bp + bp->s.size == p->s.ptr) {  /* join to upper nbr */
-        bp->s.size += p->s.ptr->s.size;
-        bp->s.ptr = p->s.ptr->s.ptr;
-    } else
-        bp->s.ptr = p->s.ptr;
+    /* free listesinin yeniden düzenlenmesi - update free list */
+    /* kendisinden büyük bloğa eklenecek ise sol tarafa ekle */
+    if (block_p + block_p->str.size == p->str.ptr) {
 
-    if (p + p->s.size == bp) {  /* join to lower nbr */
-        p->s.size += bp->s.size;
-        p->s.ptr = bp->s.ptr;
+        /* size bilgisini güncelle ve
+         * blok pointer, eklenen alanın başlangıcını göstersin */
+        block_p->str.size += p->str.ptr->str.size;
+        block_p->str.ptr = p->str.ptr->str.ptr;
     } else
-        p->s.ptr = bp;
+        block_p->str.ptr = p->str.ptr;
+
+    /* kendisinden küçük bloğa eklenecek ise sağ tarafa ekle */
+    if (p + p->str.size == block_p) {
+
+        /* size bilgisini güncelle ve
+         * eklenen alan başlangıç olarak, blok pointer'ın
+         * gösterdiği yeri göstersin */
+        p->str.size += block_p->str.size;
+        p->str.ptr = block_p->str.ptr;
+    } else
+        p->str.ptr = block_p;
 
     /* p, artık free listesinin başlangıcı oluyor */
     freep = p;  /* p: start of free list */
@@ -65,8 +75,8 @@ static Header *morecore(unsigned nu) {
 
     /* istenilen alan minimum istekten küçük ise
      * bunu minimum isteğe genişlet */
-    if (nu < NALLOC)
-        nu = NALLOC;
+    if (nu < MIN_REQUEST)
+        nu = MIN_REQUEST;
 
     /* sbrk(n): sistemden n byte istekte bulun */
     /* sbrk(n) returns a pointer to n more bytes of storage */
@@ -77,7 +87,7 @@ static Header *morecore(unsigned nu) {
         return NULL;
 
     up = (Header *) cp;
-    up->s.size = nu;
+    up->str.size = nu;
 
     /* tahsis edilen alandan sonraki alanları serbest bırak */
     new_free((void *) (up + 1));
@@ -96,23 +106,23 @@ void *new_malloc(unsigned nbytes) {
 
     /* free list yoksa -> size = 0 ata */
     if ((prevp = freep) == NULL) {  /* no free list yet */
-        base.s.ptr = freep = prevp = &base;
-        base.s.size = 0;
+        empty_list.str.ptr = freep = prevp = &empty_list;
+        empty_list.str.size = 0;
     }
 
     /* yeterince büyük alan bulma süreci */
-    for (p = prevp->s.ptr;; prevp = p, p = p->s.ptr) {
+    for (p = prevp->str.ptr;; prevp = p, p = p->str.ptr) {
 
         /* yeterince büyük alan bulununca */
-        if (p->s.size >= nunits) {  /* big enough */
+        if (p->str.size >= nunits) {  /* big enough */
 
             /* tam istenilen kadar alan bulununca */
-            if (p->s.size == nunits)  /* exactly */
-                prevp->s.ptr = p->s.ptr;
+            if (p->str.size == nunits)  /* exactly */
+                prevp->str.ptr = p->str.ptr;
             else {  /* allocate tail end */
-                p->s.size -= nunits;
-                p += p->s.size;
-                p->s.size = nunits;
+                p->str.size -= nunits;
+                p += p->str.size;
+                p->str.size = nunits;
             }
 
             /* free listesinin başlangıç adresini güncelle */
