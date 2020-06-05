@@ -89,7 +89,6 @@ static Header *morecore(unsigned nu) {
     up = (Header *) cp;
     up->str.size = nu;
 
-    /* tahsis edilen alandan sonraki alanları serbest bırak */
     new_free((void *) (up + 1));
 
     return freep;
