@@ -119,7 +119,7 @@ void *new_malloc(unsigned nbytes) {
             if (p->str.size == nunits)
                 prevp->str.ptr = p->str.ptr;
             else {
-                /* allocate tail end */
+                /* liste sonundan tahsis et - allocate tail end */
                 p->str.size -= nunits;
                 p += p->str.size;
                 p->str.size = nunits;
